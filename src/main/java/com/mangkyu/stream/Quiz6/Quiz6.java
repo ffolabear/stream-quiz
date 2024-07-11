@@ -1,5 +1,7 @@
 package com.mangkyu.stream.Quiz6;
 
+import static java.util.stream.Collectors.*;
+
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
@@ -33,17 +35,29 @@ public class Quiz6 {
         };
     }
 
+    public static void main(String[] args) {
+        Quiz6 quiz6 = new Quiz6();
+        quiz6.quiz1();
+        quiz6.quiz2();
+    }
+
     // stuArr에서 불합격(150점 미만)한 학생의 수를 남자와 여자로 구별하여라. (Boolean, List)
     public Map<Boolean, List<Student>> quiz1() {
         Map<Boolean, List<Student>> collect = Arrays.stream(stuArr)
-                .filter(student -> student.getScore() > 150)
-                .collect(Collectors.groupingBy(student -> student.isMale()));
+                .filter(student -> student.getScore() < 150)
+                .collect(groupingBy(student -> student.isMale()));
+        System.out.println(collect);
         return collect;
     }
 
     // 각 반별 총점을 학년 별로 나누어 구하여라 (Map<Integer, Map<Integer, Integer>>)
     public Map<Integer, Map<Integer, Integer>> quiz2() {
-        return new HashMap<>();
+        Map<Integer, Map<Integer, Integer>> collect = Arrays.stream(stuArr)
+                .collect(
+                        groupingBy(student -> student.getHak(),
+                                groupingBy(student -> student.getBan(), summingInt(student -> student.getScore()))));
+        System.out.println(collect);
+        return collect;
     }
 
 }
